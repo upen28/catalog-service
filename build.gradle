@@ -42,10 +42,6 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named("bootBuildImage") {
-	imageName = 'polar-bookshop/catalog-service:0.0.1-SNAPSHOT'
-}
-
 tasks.named('test') {
 	useJUnitPlatform()
 }
