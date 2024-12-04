@@ -20,7 +20,7 @@ spring:
     hikari:
       connection-timeout: 2000
       maximum-pool-size: 5
-
+          
 logging:
    pattern:
       level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
@@ -48,3 +48,4 @@ management:
          application: ${spring.application.name}
 polar:
   greeting: Welcome to the local book catalog!
+
