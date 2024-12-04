@@ -1,6 +1,5 @@
 name: Commit Stage
-on:
-  workflow_dispatch:
+on: [workflow_dispatch]
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: upen28/polar-bookshop/catalog-service
