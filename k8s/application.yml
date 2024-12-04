@@ -3,6 +3,7 @@ spring:
       url: jdbc:postgresql://my-release-postgresql.default.svc.cluster.local:5432/polardb_catalog
       username: postgres
       password: sxctWoXesH
-spring:
-  config:
-    import: configtree:/workspace/secrets/*/      
+   config:
+     import: configtree:/workspace/secrets/*/  
+
+        
