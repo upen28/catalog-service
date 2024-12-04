@@ -46,10 +46,15 @@ spec:
             volumeMounts:
             -  name: postgres-credentials-volume
                mountPath: /workspace/secrets/postgres
+            -  name: catalog-config-volume
+               mountPath: /workspace/config   
          volumes:
          -  name: postgres-credentials-volume
             secret:
                secretName: catalog-postgres-credentials
+         - name: catalog-config-volume
+           configMap:
+               name: catalog-config      
 ---
 apiVersion: v1
 kind: Service
