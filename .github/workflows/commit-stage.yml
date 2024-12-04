@@ -6,7 +6,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: upen28/polar-bookshop/catalog-service
-  VERSION: latest
+  VERSION: ${{ github.sha }}
        
 jobs:
   build:
