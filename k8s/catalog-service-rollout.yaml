@@ -21,7 +21,7 @@ spec:
          labels:
             app: catalog-service
          annotations:
-            prometheus.io/scrape: "true"
+            prometheus.io/scrape: true
             prometheus.io/path: /actuator/prometheus
             prometheus.io/port: '9001'
       spec:
@@ -44,17 +44,17 @@ spec:
                initialDelaySeconds: 15
                periodSeconds: 30
             volumeMounts:
-            -  name: postgres-credentials-volume
+            -  name: catalog-secrets-volume
                mountPath: /workspace/secrets/postgres
-            -  name: catalog-config-volume
-               mountPath: /workspace/config   
+            -  name: catalog-configmap-volume
+               mountPath: /workspace/config
          volumes:
-         -  name: postgres-credentials-volume
+         -  name: catalog-secrets-volume
             secret:
-               secretName: catalog-postgres-credentials
-         - name: catalog-config-volume
-           configMap:
-               name: catalog-config      
+               secretName: catalog-secrets
+         -  name: catalog-configmap-volume
+            configMap:
+               name: catalog-configmap
 ---
 apiVersion: v1
 kind: Service
@@ -69,12 +69,3 @@ spec:
    -  protocol: TCP
       port: 80
       targetPort: 9001
-
----
-apiVersion: v1
-kind: Secret
-metadata:
-   name: catalog-postgres-credentials
-type: Opaque
-stringData:
-   spring.datasource.password: sxctWoXesH
