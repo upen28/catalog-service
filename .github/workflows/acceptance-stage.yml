@@ -10,7 +10,7 @@ env:
   OWNER: upen28
   REGISTRY: ghcr.io
   APP_REPO: catalog-service
-  DEPLOY_REPO: polar-deployment
+  DEPLOY_REPO: polar-deployment-2
   VERSION: ${{ github.sha }}
 
 jobs:
