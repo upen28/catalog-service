@@ -7,24 +7,33 @@ on:
 concurrency: acceptance
 
 env:
-  BRANCH_NAME: ${{ github.event.workflow_run.head_branch == 'refs/heads/main' && 'production' || 'development' }}
+  REGISTRY: ghcr.io
+  USER_NAME: upen28
+  APP_IMAGE:  polar-bookshop/${{ github.event.workflow_run.head_repository.name }} 
+  APP_VERSION: ${{ github.event.workflow_run.head_sha }}
+ 
+  APP_NAME: ${{ github.event.workflow_run.head_repository.name}}
+  APP_DIR_NAME: ${{ github.event.workflow_run.head_branch.name == 'refs/heads/main' && 'production' || 'development' }}
+  
   DEPLOY_REPO: polar-deployment-2
-  run: echo REGISTRY ,OWNER, APP_REPO, IMAGE_NAME, VERSION, BRANCH_NAME, DEPLOY_REPO
 
 jobs:
   deliver:
-    name: Deliver Release Candidate to BRANCH_NAME
+    name: Deliver Release 
     runs-on: ubuntu-latest
     steps:
-      - name: Deliver Application to Production
+      - name: echo fields
+        run: echo  env.REGISTRY ,env.OWNER, env.APP_REPO, env.IMAGE_NAME, env.VERSION, env.BRANCH_NAME, env.DEPLOY_REPO
+      
+      - name: Repository Dispatch Action 
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.DISPATCH_TOKEN }}
-          repository: ${{ env.OWNER }}/${{ env.DEPLOY_REPO }}
+          repository: ${{ env.USER_NAME }}/${{ env.DEPLOY_REPO }}
           event-type: app_delivery
           client-payload: '{
-            "app_image": "ghcr.io/upen28/polar-bookshop/${{ github.event.workflow_run.head_repository }}",
-            "app_version": "${{ github.event.workflow_run.head_sha }}", 
-            "app_name": "${{ github.event.workflow_run.head_repository}}",
-            "app-dir-name": ${{env.BRANCH_NAME}} 
+            "app_image": "${{ env.REGISTRY }}/${{ env.USER_NAME }}/${{ env.APP_IMAGE }}",
+            "app_version": "${{ env.APP_VERSION }}", 
+            "app_name": "${{ env.APP_NAME }}",
+            "app-dir-name": ${{env.APP_DIR_NAME}} 
             }'              
