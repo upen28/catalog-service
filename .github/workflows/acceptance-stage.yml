@@ -1,0 +1,35 @@
+name: Acceptance Stage
+on:
+  workflow_run:
+    workflows: ['Commit Stage']
+    types: [completed]
+    branches: [main, dev]
+concurrency: acceptance
+
+env:
+  REGISTRY: ghcr.io
+  USER_NAME: upen28
+  APP_IMAGE:  polar-bookshop/${{ github.event.workflow_run.head_repository.name }} 
+  APP_VERSION: ${{ github.event.workflow_run.head_sha }}
+  APP_NAME: ${{ github.event.workflow_run.head_repository.name}}
+  APP_DIR_NAME: ${{ github.event.workflow_run.head_branch == 'main' && 'production' || 'development' }}
+ 
+  DEPLOY_REPO: polar-deployment-2
+
+jobs:
+  deliver:
+    name: Deliver Release 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch Action 
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.DISPATCH_TOKEN }}
+          repository: ${{ env.USER_NAME }}/${{ env.DEPLOY_REPO }}
+          event-type: app_delivery
+          client-payload: '{
+            "app_image": "${{ env.REGISTRY }}/${{ env.USER_NAME }}/${{ env.APP_IMAGE }}",
+            "app_version": "${{ env.APP_VERSION }}", 
+            "app_name": "${{ env.APP_NAME }}",
+            "app-dir-name": "${{env.APP_DIR_NAME}}" 
+            }'              
