@@ -1,11 +1,62 @@
 name: Commit Stage
 on: [workflow_dispatch]
-
+env:
+  REGISTRY: ghcr.io
+  USER_NAME: upen28
+  IMAGE_NAME: polar-bookshop/${{ github.repository }}
+  VERSION: ${{ github.sha }}
+       
 jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     steps:
-     - run: echo "simple build" 
-   
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+      - name: Build, Unit Tests and Integration Tests
+        run: |
+          chmod +x gradlew
+          ./gradlew build  
+  package: 
+    name: Package and Publish
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      security-events: write
+    steps: 
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+      - name: Build Container Image
+        run: |
+          chmod +x gradlew
+          ./gradlew bootBuildImage \
+            --imageName ${{ env.REGISTRY }}/${{env.USER_NAME}}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+     
+      - name: Log into Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish Container Image
+        run: |
+          docker image ls 
+          docker push ${{ env.REGISTRY }}/${{env.USER_NAME}}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
       

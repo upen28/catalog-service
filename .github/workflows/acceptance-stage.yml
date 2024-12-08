@@ -11,12 +11,9 @@ env:
   USER_NAME: upen28
   APP_IMAGE:  polar-bookshop/${{ github.event.workflow_run.head_repository.name }} 
   APP_VERSION: ${{ github.event.workflow_run.head_sha }}
- 
   APP_NAME: ${{ github.event.workflow_run.head_repository.name}}
-  APP_DIR_NAME: ${{ github.event.workflow_run.head_branch}}
-
-  HEAD_COMMIT: ${{ github.event.workflow_run.head_commit.message }}
-  
+  APP_DIR_NAME: ${{ github.event.workflow_run.head_branch == 'main' && 'production' || 'development' }}
+ 
   DEPLOY_REPO: polar-deployment-2
 
 jobs:
@@ -24,9 +21,6 @@ jobs:
     name: Deliver Release 
     runs-on: ubuntu-latest
     steps:
-      - name: echo fields
-        run: echo  env.REGISTRY ,env.OWNER, env.APP_REPO, env.IMAGE_NAME, env.VERSION, env.BRANCH_NAME, env.DEPLOY_REPO
-      
       - name: Repository Dispatch Action 
         uses: peter-evans/repository-dispatch@v3
         with:
