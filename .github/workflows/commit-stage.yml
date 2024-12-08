@@ -5,5 +5,7 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
+    steps:
+     - run: echo "simple build" 
    
       
