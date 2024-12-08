@@ -7,37 +7,21 @@ on:
 concurrency: acceptance
 
 env:
-  OWNER: upen28
   REGISTRY: ghcr.io
-  IMAGE_NAME: polar-bookshop/catalog-service
-  VERSION: ${{ github.sha }}
-  APP_REPO: catalog-service
+  OWNER: upen28
+  APP_REPO: ${{ github.event.workflow_run.head_repository}}
+  IMAGE_NAME: polar-bookshop/${{ github.event.workflow_run.head_repository }}
+  VERSION: ${{ github.event.workflow_run.head_sha }}
+  BRANCH_NAME: ${{ github.event.workflow_run.head_branch == 'refs/heads/main' && 'production' || 'development' }}
   
   DEPLOY_REPO: polar-deployment-2
+
+  run: echo REGISTRY ,OWNER, APP_REPO, IMAGE_NAME, VERSION, BRANCH_NAME, DEPLOY_REPO
   
 
 jobs:
-  functional:
-    name: Functional Acceptance Tests
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Running functional acceptance tests"
-  performance:
-    name: Performance Tests
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Running performance tests"
-  security:
-    name: Security Tests
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Running security tests"
   deliver:
-    name: Deliver Release Candidate to Production
-    needs: [ functional, performance, security ]
+    name: Deliver Release Candidate to BRANCH_NAME
     runs-on: ubuntu-latest
     steps:
       - name: Deliver Application to Production
@@ -50,5 +34,5 @@ jobs:
             "app_image": "${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.IMAGE_NAME }}",
             "app_version": "${{ env.VERSION }}", 
             "app_name": "${{ env.APP_REPO }}",
-            "app-dir-name": "production" 
+            "app-dir-name": ${{env.BRANCH_NAME}} 
             }'              
