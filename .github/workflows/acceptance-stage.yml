@@ -13,7 +13,9 @@ env:
   APP_VERSION: ${{ github.event.workflow_run.head_sha }}
  
   APP_NAME: ${{ github.event.workflow_run.head_repository.name}}
-  APP_DIR_NAME: ${{ github.event.workflow_run.head_branch.name }}
+  APP_DIR_NAME: ${{ github.event.workflow_run.head_branch.BRANCH_NAME}}
+
+  HEAD_COMMIT: ${{ github.event.workflow_run.head_commit.message }}
   
   DEPLOY_REPO: polar-deployment-2
 
