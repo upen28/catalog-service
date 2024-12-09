@@ -9,12 +9,12 @@ concurrency: acceptance
 env:
   REGISTRY: ghcr.io
   USER_NAME: upen28
-  APP_IMAGE:  polar-bookshop/${{ github.event.workflow_run.head_repository.name }} 
+  APP_IMAGE:  polar-bookshop/${{ github.event.workflow_run.head_repository.name }}/${{ github.event.workflow_run.head_branch}} 
   APP_VERSION: ${{ github.event.workflow_run.head_sha }}
   APP_NAME: ${{ github.event.workflow_run.head_repository.name}}
-  APP_DIR_NAME: ${{ github.event.workflow_run.head_branch == 'main' && 'production' || 'development' }}
+  APP_DIR_NAME: ${{ github.event.workflow_run.head_branch}}
  
-  DEPLOY_REPO: polar-deployment-2
+  DEPLOY_REPO: ${{ github.event.workflow_run.head_repository.name}}-gitops
 
 jobs:
   deliver:
@@ -26,7 +26,7 @@ jobs:
         with:
           token: ${{ secrets.DISPATCH_TOKEN }}
           repository: ${{ env.USER_NAME }}/${{ env.DEPLOY_REPO }}
-          event-type: app_delivery
+          event-type: app_delivery_${{ github.event.workflow_run.head_repository.name}}
           client-payload: '{
             "app_image": "${{ env.REGISTRY }}/${{ env.USER_NAME }}/${{ env.APP_IMAGE }}",
             "app_version": "${{ env.APP_VERSION }}", 
