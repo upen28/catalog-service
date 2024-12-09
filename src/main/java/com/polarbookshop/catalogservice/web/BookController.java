@@ -31,7 +31,7 @@ public class BookController {
 
 	@GetMapping
 	public Iterable<Book> get() {
-		log.info("fetching the list of books in the catalog");
+		log.info("fetching... the list of books in the catalog");
 		return bookService.viewBookList();
 	}
 
