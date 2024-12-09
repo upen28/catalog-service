@@ -3,7 +3,7 @@ on: [workflow_dispatch]
 env:
   REGISTRY: ghcr.io
   USER_NAME: upen28
-  IMAGE_NAME: polar-bookshop/${{ github.event.repository.name }}
+  IMAGE_NAME: polar-bookshop/${{ github.event.repository.name }}/${{ github.ref_name}}
   VERSION: ${{ github.sha }}
        
 jobs:
@@ -59,3 +59,4 @@ jobs:
         run: |
           docker image ls 
           docker push ${{ env.REGISTRY }}/${{env.USER_NAME}}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+      
