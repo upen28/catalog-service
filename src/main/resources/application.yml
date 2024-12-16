@@ -36,9 +36,6 @@ management:
          show-components: always
          probes:
             enabled: true
-      sbom:
-        application:
-            location: file:catalog-service/build/resources/main/META-INF/sbom/application.cdx.json      
    info:
       env:
          enabled: true
