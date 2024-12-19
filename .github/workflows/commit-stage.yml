@@ -81,7 +81,7 @@ jobs:
             -Dsonar.java.binaries=build/classes
 
       - name: Upload SonarQube Report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: sonarqube-report
           path: sonar-report.json
