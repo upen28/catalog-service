@@ -64,3 +64,29 @@ jobs:
         with:
           name: jacoco-report
           path: build/reports/jacoco/test/jacocoTestReport.csv
+
+      - name: Set up SonarQube
+        uses: SonarSource/sonarqube-scan-action@v4.2.1
+        env:
+          SONAR_TOKEN: ${{ secrets.CLOUD_SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Run SonarQube analysis
+        run: |
+          sonar-scanner
+            -Dsonar.host.url=${SONAR_HOST_URL}
+            -Dsonar.login=${SONAR_TOKEN}
+            -Dsonar.organization=upen-ploarbookshop
+            -Dsonar.projectKey=polarbook-catalog-service
+            -Dsonar.projectName=catalog-service
+            -Dsonar.sources=.
+            -Dsonar.java.binaries=build/classes
+
+      - name: Upload SonarQube report
+        uses: SonarSource/sonarqube-scan-action@v4.2.1
+        env:
+          SONAR_TOKEN: ${{ secrets.CLOUD_SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: --upload-report    
+
