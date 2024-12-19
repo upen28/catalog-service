@@ -20,11 +20,10 @@ jobs:
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4.2.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.CLOUD_SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
-          args: |
+          args: >
             -Dsonar.host.url=${SONAR_HOST_URL}
             -Dsonar.login=${CLOUD_SONAR_TOKEN}
             -Dsonar.organization=upen-ploarbookshop
@@ -32,6 +31,7 @@ jobs:
             -Dsonar.projectName=POLARBOOKSHOP
             -Dsonar.sources=.
             -Dsonar.java.binaries=build/classes
+            -Dsonar.verbose=true
 
       
 
