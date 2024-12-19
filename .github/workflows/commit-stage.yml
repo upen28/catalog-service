@@ -80,11 +80,9 @@ jobs:
             -Dsonar.sources=.
             -Dsonar.java.binaries=build/classes
 
-      - name: Upload SonarQube report
-        uses: SonarSource/sonarqube-scan-action@v4.2.1
-        env:
-          SONAR_TOKEN: ${{ secrets.CLOUD_SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      - name: Upload SonarQube Report
+        uses: actions/upload-artifact@v2
         with:
-          args: --upload-report    
+          name: sonarqube-report
+          path: sonar-report.json
 
