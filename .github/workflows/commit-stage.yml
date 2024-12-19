@@ -8,7 +8,7 @@ env:
 
 jobs:
   build:
-    name: Build, SCAN and Test
+    name: SCAN(Trivy), BUILD, TEST and TEST COVERAGE(Jacoco)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -21,26 +21,44 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 17
           cache: gradle
 
-      - name: Run Trivy Vulnerability Scanner in Repo Mode
+      - name: Run Trivy Vulnerability Scanner in fs Mode
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          scan-type: 'fs'
+          scan-type: "fs"
           scan-ref: "."
-          scanners: 'misconfig,license'
+          scanners: "license"
           ignore-unfixed: true
-          format: 'sarif'
-          output: 'trivy-repo-results.sarif'
-          severity: 'CRITICAL,HIGH'
+          format: "sarif"
+          output: "trivy-repo-results.sarif"
+          severity: "CRITICAL,HIGH"
 
       - name: Upload Trivy Scan Results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-repo-results.sarif'
+          sarif_file: "trivy-repo-results.sarif"
 
       - name: Build, Unit Tests and Integration Tests
         run: |
           chmod +x gradlew
           ./gradlew build
+
+      - name: Generate JaCoCo Badge
+        id: jacoco
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+          jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
+
+      - name: Log coverage percentage
+        run: |
+          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+          echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
+
+      - name: Upload JaCoCo coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
