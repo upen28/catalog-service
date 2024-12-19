@@ -70,6 +70,8 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.CLOUD_SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_PRJOJECT_KEY: polarbook-catalog-service
+          SONAR_ORGANIZATION: upen-ploarbookshop
 
       - name: Run SonarQube analysis
         run: |
@@ -78,7 +80,7 @@ jobs:
             -Dsonar.login=${SONAR_TOKEN}
             -Dsonar.organization=upen-ploarbookshop
             -Dsonar.projectKey=polarbook-catalog-service
-            -Dsonar.projectName=catalog-service
+            -Dsonar.projectName=POLARBOOKSHOP
             -Dsonar.sources=.
             -Dsonar.java.binaries=build/classes
 
