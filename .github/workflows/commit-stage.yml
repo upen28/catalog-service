@@ -30,6 +30,7 @@ jobs:
             -Dsonar.projectKey=polarbook-catalog-service
             -Dsonar.projectName=POLARBOOKSHOP
             -Dsonar.sources=.
+            -Dsonar.java.binaries=$(find . -path '*/build/classes/java' | xargs | tr ' ' ',')
             -Dsonar.verbose=true
 
       
