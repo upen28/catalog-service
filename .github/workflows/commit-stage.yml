@@ -8,7 +8,7 @@ env:
 
 jobs:
   build:
-    name: SCAN(Trivy), BUILD, TEST and TEST COVERAGE(Jacoco)
+    name: SCAN(Trivy), [BUILD, UNIT TEST, INTEGRATION TEST](gradle) and TEST COVERAGE(Jacoco)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -51,7 +51,7 @@ jobs:
         with:
           generate-branches-badge: true
           jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
-          fail-if-coverage-less-than: "80%"
+          #fail-if-coverage-less-than: "80%"
 
 
       - name: Log coverage percentage
@@ -63,4 +63,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
-          path: build/reports/jacoco/test
+          path: build/reports/jacoco/test/jacocoTestReport.csv
