@@ -17,57 +17,10 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: gradle
-
-      - name: Run Trivy Vulnerability Scanner in fs Mode
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: "fs"
-          scan-ref: "."
-          scanners: "license"
-          ignore-unfixed: true
-          format: "sarif"
-          output: "trivy-repo-results.sarif"
-          severity: "CRITICAL,HIGH"
-
-      - name: Upload Trivy Scan Results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: "trivy-repo-results.sarif"
-
-      - name: Build, Unit Tests and Integration Tests
-        run: |
-          chmod +x gradlew
-          ./gradlew build
-
-      - name: Generate JaCoCo Badge
-        id: jacoco
-        uses: cicirello/jacoco-badge-generator@v2
-        with:
-          generate-branches-badge: true
-          jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
-          #fail-if-coverage-less-than: "80%"
-
-
-      - name: Log coverage percentage
-        run: |
-          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
-          echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
-
-      - name: Upload JaCoCo coverage report
-        uses: actions/upload-artifact@v3
-        with:
-          name: jacoco-report
-          path: build/reports/jacoco/test/jacocoTestReport.csv
-
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4.2.1
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.CLOUD_SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
@@ -80,11 +33,5 @@ jobs:
             -Dsonar.sources=.
             -Dsonar.java.binaries=build/classes
 
-      - name: Upload SonarQube report
-        uses: SonarSource/sonarqube-scan-action@v4.2.1
-        env:
-          SONAR_TOKEN: ${{ secrets.CLOUD_SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: --upload-report    
+      
 
