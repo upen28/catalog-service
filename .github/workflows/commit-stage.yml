@@ -74,15 +74,20 @@ jobs:
           args: >
             -Dsonar.host.url=${SONAR_HOST_URL}
             -Dsonar.login=${SONAR_TOKEN}
-            -Dsonar.organization=Upendra_Verma
+            -Dsonar.organization="Upendra Verma"
             -Dsonar.projectKey=upen28-catalog-service
             -Dsonar.projectName=catalog-service
             -Dsonar.sources=.
             -Dsonar.java.binaries=build/classes
 
-      - name: Upload SonarQube Report
-        uses: actions/upload-artifact@v3
+      - name: SonarQube Server Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
         with:
-          name: sonarqube-report
-          path: sonar-report.json
+          pollingTimeoutSec: 600
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_CLOUD_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_CLOUD_HOST_URL }}
 
+      - name: "Example show SonarQube Server Quality Gate Status value"
+        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
