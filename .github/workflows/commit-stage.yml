@@ -74,9 +74,9 @@ jobs:
           args: >
             -Dsonar.host.url=${SONAR_HOST_URL}
             -Dsonar.login=${SONAR_TOKEN}
-            -Dsonar.organization=upen-ploarbookshop
-            -Dsonar.projectKey=polarbook-catalog-service
-            -Dsonar.projectName=POLARBOOKSHOP
+            -Dsonar.organization=Upendra Verma
+            -Dsonar.projectKey=upen28-catalog-service
+            -Dsonar.projectName=catalog-service
             -Dsonar.sources=.
             -Dsonar.java.binaries=build/classes
 
