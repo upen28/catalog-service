@@ -75,19 +75,7 @@ jobs:
             -Dsonar.host.url=${SONAR_HOST_URL}
             -Dsonar.login=${SONAR_TOKEN}
             -Dsonar.organization=upen28
-            -Dsonar.projectKey=upen28-catalog-service
-            -Dsonar.projectName=catalog-service
+            -Dsonar.projectKey=upen28-${{ github.event.repository.name }}
+            -Dsonar.projectName=${{ github.event.repository.name }}
             -Dsonar.sources=.
-            -Dsonar.java.binaries=build/classes
-
-      - name: SonarQube Server Quality Gate check
-        id: sonarqube-quality-gate-check
-        uses: sonarsource/sonarqube-quality-gate-action@master
-        with:
-          pollingTimeoutSec: 600
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_CLOUD_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_CLOUD_HOST_URL }}
-
-      - name: "Example show SonarQube Server Quality Gate Status value"
-        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
+            -Dsonar.java.binaries=build/classes    
