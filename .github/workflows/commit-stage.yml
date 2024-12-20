@@ -68,12 +68,12 @@ jobs:
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4.2.1
         env:
-          SONAR_TOKEN: ${{ secrets.CLOUD_SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_CLOUD_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_CLOUD_HOST_URL }}
         with:
           args: >
             -Dsonar.host.url=${SONAR_HOST_URL}
-            -Dsonar.login=${CLOUD_SONAR_TOKEN}
+            -Dsonar.login=${SONAR_TOKEN}
             -Dsonar.organization=upen-ploarbookshop
             -Dsonar.projectKey=polarbook-catalog-service
             -Dsonar.projectName=POLARBOOKSHOP
