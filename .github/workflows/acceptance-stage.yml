@@ -61,7 +61,7 @@ jobs:
           format: "table"
 
       - name: Run Trivy Image Vulnerability Scanner for Docker Image in SARIF Format
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: ${{ env.REGISTRY }}/${{env.USER_NAME}}/${{ env.APP_IMAGE }}:${{ env.APP_VERSION }}
           scanners: "vuln"
