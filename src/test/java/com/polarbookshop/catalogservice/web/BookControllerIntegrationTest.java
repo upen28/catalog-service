@@ -73,4 +73,9 @@ class BookControllerIntegrationTest {
         webTestClient.post().uri("/books").bodyValue(newBook).exchange().expectStatus().isCreated();
         bookService.removeBookFromCatalog("1234567895");
     }
+    @Test
+    void hello(){
+        webTestClient.get().uri("/").exchange().expectStatus().isOk();
+    }
+    
 }
