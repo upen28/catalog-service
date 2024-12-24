@@ -48,7 +48,7 @@ public class BookController {
 		bookService.removeBookFromCatalog(isbn);
 	}
 
-	@PutMapping
+	@PutMapping("{isbn}")
 	public Book put(@PathVariable("isbn") String isbn, @Valid @RequestBody Book book) {
 		log.info("updating book with ISBN {} from the catalog", isbn);
 		return bookService.editBookDetails(isbn, book);

@@ -28,7 +28,7 @@ public class Book {
 	Long id;
 
 	@NotBlank(message = "The book ISBN must be defined.")
-	@Pattern(regexp = "^([0-9]{10}|[0-9]{13})$", message = "The ISBN format must be valid.")
+	@Pattern(regexp = "^(\\d{10}|\\d{13})$", message = "The ISBN format must be valid.")
 	String isbn;
 
 	@NotBlank(message = "The book title must be defined.")
@@ -64,11 +64,17 @@ public class Book {
 
 	public Book(Long id, String isbn, String title, String author, Double price, String publisher, Instant createdDate,
 			Instant lastModifiedDate, String createdBy, String lastModifiedBy, int version) {
+		this.id = id;
+		this.createdDate = createdDate;
+		this.lastModifiedDate = lastModifiedDate;
+		this.createdBy = createdBy;
+		this.lastModifiedBy = lastModifiedBy;
 		this.isbn = isbn;
 		this.title = title;
 		this.author = author;
 		this.price = price;
 		this.publisher = publisher;
+		this.version = version;
 	}
 
 	public static Book of(String isbn, String title, String author, Double price, String publisher) {
