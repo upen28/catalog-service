@@ -1,5 +1,8 @@
 package com.polarbookshop.catalogservice.web;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,6 +28,16 @@ public class BookController {
 	private static final Logger log = LoggerFactory.getLogger(BookController.class);
 	private final BookService bookService;
 
+	private String getIP() {
+		try {
+			InetAddress localHost = InetAddress.getLocalHost();
+			return localHost.getHostAddress();
+
+		} catch (UnknownHostException e) {
+			return "";
+		}
+	}
+
 	public BookController(BookService bookService) {
 		this.bookService = bookService;
 	}
@@ -32,7 +45,9 @@ public class BookController {
 	@GetMapping
 	public Iterable<Book> get() {
 		log.info("fetching..... the list of books in the catalog");
-		return bookService.viewBookList();
+		Iterable<Book> itrBooks = bookService.viewBookList();
+		itrBooks.forEach(book -> book.setIp(getIP()));
+		return itrBooks;
 	}
 
 	@GetMapping("{isbn}")
@@ -58,7 +73,9 @@ public class BookController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public Book post(@Valid @RequestBody Book book) {
 		log.info("adding a new  book to the catalog with ISBN {}", book.getIsbn());
-		return bookService.addBookToCatalog(book);
+		Book rtnbook = bookService.addBookToCatalog(book);
+		rtnbook.setIp(getIP());
+		return rtnbook;
 	}
 
 }
