@@ -22,8 +22,11 @@ spring:
       maximum-pool-size: 5
           
 logging:
-   pattern:
-      level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+  level:
+    org.flywaydb: DEBUG  
+    org.hibernate.SQL: DEBUG
 
 management:
    endpoints:
