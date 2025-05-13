@@ -24,9 +24,14 @@ spring:
 logging:
   pattern:
     level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+    file: "%d{yyyy-MM-dd HH:mm:ss} %5p [${spring.application.name},%X{trace_id},%X{span_id}] %logger{40} - %msg%n"
   level:
-    org.flywaydb: DEBUG  
+    org.flywaydb: DEBUG
     org.hibernate.SQL: DEBUG
+  file:
+    name: /home/ec2-user/logs/catalog-service/catalog-service.log
+    max-history: 7
+    max-size: 10MB
 
 management:
    endpoints:
